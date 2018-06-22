@@ -1,6 +1,6 @@
 package com.xy.rmi;
 
-import com.rkhd.restapi.controller.v2.test.TestService;
+import com.demo.restapi.controller.v2.test.TestService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
