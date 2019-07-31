@@ -16,6 +16,36 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.dianping.cat</groupId>
+            <artifactId>cat-client</artifactId>
+            <version>1910.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rkhd.ienterprise</groupId>
+            <artifactId>base-core</artifactId>
+            <version>1904.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rkhd.ienterprise</groupId>
+            <artifactId>paas-core</artifactId>
+            <version>1910.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rkhd.ienterprise</groupId>
+            <artifactId>paas-customize-core</artifactId>
+            <version>1910.28</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rkhd.ienterprise</groupId>
+            <artifactId>cloud-multi-tenant</artifactId>
+            <version>1910.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rkhd.ienterprise</groupId>
+            <artifactId>paas-metadata-core</artifactId>
+            <version>1910.25</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
