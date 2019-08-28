@@ -1,4 +1,4 @@
-package com.xy.rmi;
+package com.xy.git;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -11,21 +11,22 @@ import org.eclipse.jgit.api.Git;
 
 import java.io.File;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * git clone 用例脚本 每个线程创建一个对象的实例，然后顺序执行 setupTest(),runTest() Created
+ * git clone 用例脚本
+ *
+ * 每个线程创建一个对象的实例，然后顺序执行 setupTest(),runTest() Created
  * by tangqi on 2019/04/19.
  */
-public class GitPushPrepareTest extends AbstractJavaSamplerClient {
+public class GitCloneTest extends AbstractJavaSamplerClient {
 
-    static Log log = LogFactory.getLog(GitPushPrepareTest.class);
+    static Log log = LogFactory.getLog(GitCloneTest.class);
 
     private String gitURI;
     //测试根目录，每个线程会再创建一级子目录
     private String gitBaseDir;
     private Integer index;
-    private String path;
+
 
     @Override
     public Arguments getDefaultParameters() {
@@ -35,8 +36,6 @@ public class GitPushPrepareTest extends AbstractJavaSamplerClient {
         arguments.addArgument("gitURI", "git@github.com:yuweibo/jmeter.git");
         arguments.addArgument("gitBaseDir", "D:\\git_clone_test");
         arguments.addArgument("index", "0");
-        arguments.addArgument("path", "D:\\git_clone_test\\testFile.txt");
-
         return arguments;
     }
 
@@ -48,7 +47,6 @@ public class GitPushPrepareTest extends AbstractJavaSamplerClient {
         super.setupTest(context);
         gitURI = context.getParameter("gitURI");
         gitBaseDir = context.getParameter("gitBaseDir");
-        path = context.getParameter("path");
         File baseDir = new File(gitBaseDir);
         if (!baseDir.exists()) {
             baseDir.mkdirs();
@@ -68,32 +66,13 @@ public class GitPushPrepareTest extends AbstractJavaSamplerClient {
                 FileUtils.deleteDirectory(subDir);
             }
             //test logic start
-            File testFile = new File(path);
-            //validate testFile
-            if (!testFile.exists() || testFile.isDirectory()){
-                result.setSuccessful(false);
-            }else {
-//                git = Git.open(subDir);
-                git = Git.cloneRepository()
-                        .setURI(gitURI)
-                        .setDirectory(subDir)
-                        .call();
-                //添加文件
-                FileUtils.copyFileToDirectory(testFile,subDir);
-                git.add().addFilepattern(".").call();
-                git.commit().setMessage("testFile").call();
-                result.sampleStart();
-                git.push().call();
-                //同步一下
-                git.fetch().call();
-                //删除文件
-                FileUtils.forceDelete(new File(subDir.getPath() + File.separator+ testFile.getName()));
-                git.add().addFilepattern(".").call();
-                git.commit().setMessage("deleteTestFile").call();
-                git.push().call();
-                result.setResponseData(git.getRepository().getDirectory().getPath() + ":" + new Date(), "utf-8");
-                result.setSuccessful(true);
-            }
+            result.sampleStart();
+            git = Git.cloneRepository()
+                    .setURI(gitURI)
+                    .setDirectory(subDir)
+                    .call();
+            result.setResponseData(git.getRepository().getDirectory().getPath() + ":" + new Date(), "utf-8");
+            result.setSuccessful(true);
         } catch (Exception e) {
             result.setSuccessful(false);
             log.error(e);
