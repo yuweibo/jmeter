@@ -2,11 +2,13 @@ pipeline {
   agent any
 
   options {
+    // 最多保留7天或者10条历史执行记录
     buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '10')
   }
 
   triggers {
-    cron 'H/1 * * * *'
+      // 每隔五分钟运行一次
+      cron '*/5 * * * * '
   }
 
   stages {
