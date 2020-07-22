@@ -1,39 +1,172 @@
 pipeline {
-  agent any
-  stages {
-    stage('tttt') {
-      parallel {
-        stage('s1') {
-          agent {
-            docker {
-              image 'ubuntu:18.04'
-            }
+    agent any
 
-          }
-          steps {
-            sh 'ls'
-            echo 'hello'
-            ws(dir: 's1') {
-              sh 'ls'
-            }
+    stages {
 
-          }
+
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
         }
 
-        stage('s2') {
-          steps {
-            sh 'ls'
-          }
+        stage("p build"){
+            parallel {
+               stage("build") {
+
+            stages('builds'){
+                stage('maven build'){
+                    steps {
+                        sh 'touch a.txt'
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'mvn -v'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            image 'maven:3.6.3-jdk-8-openj9'
+                        }
+                    }
+                }
+                stage('node build'){
+                    steps {
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'node -v'
+                        sh 'npm -v'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            image 'node:14.5.0'
+                        }
+                    }
+                }
+
+                stage('docker build'){
+                    steps {
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'which docker'
+                        sh 'docker -v'
+                        sh 'docker ps'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            args '-v  "/var/run/docker.sock:/var/run/docker.sock" '
+                            image 'docker:19.03.12'
+                        }
+                    }
+                }
+            }
+        }
+                stage("build1") {
+
+            stages('builds'){
+                stage('maven build'){
+                    steps {
+                        sh 'touch a.txt'
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'mvn -v'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            image 'maven:3.6.3-jdk-8-openj9'
+                        }
+                    }
+                }
+                stage('node build'){
+                    steps {
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'node -v'
+                        sh 'npm -v'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            image 'node:14.5.0'
+                        }
+                    }
+                }
+
+                stage('docker build'){
+                    steps {
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'which docker'
+                        sh 'docker -v'
+                        sh 'docker ps'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            args '-v  "/var/run/docker.sock:/var/run/docker.sock" '
+                            image 'docker:19.03.12'
+                        }
+                    }
+                }
+            }
+        }
+            }
         }
 
-      }
+        stage("build1") {
+
+            stages('builds'){
+                stage('maven build'){
+                    steps {
+                        sh 'touch a.txt'
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'mvn -v'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            image 'maven:3.6.3-jdk-8-openj9'
+                        }
+                    }
+                }
+                stage('node build'){
+                    steps {
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'node -v'
+                        sh 'npm -v'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            image 'node:14.5.0'
+                        }
+                    }
+                }
+
+                stage('docker build'){
+                    steps {
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'which docker'
+                        sh 'docker -v'
+                        sh 'docker ps'
+                    }
+                    agent {
+                        docker {
+                            customWorkspace "${WORKSPACE}/s1"
+                            args '-v  "/var/run/docker.sock:/var/run/docker.sock" '
+                            image 'docker:19.03.12'
+                        }
+                    }
+                }
+            }
+        }
+
     }
-
-  }
-  options {
-    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '10'))
-  }
-  triggers {
-    cron('*/5 * * * * ')
-  }
 }
+
+
