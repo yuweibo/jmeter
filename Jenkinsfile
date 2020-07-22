@@ -14,8 +14,7 @@ pipeline {
             sh 'ls'
             echo 'hello'
             ws(dir: 's1') {
-              sh '''
-pwd'''
+              sh 'ls'
             }
 
           }
