@@ -1,27 +1,27 @@
 pipeline {
   agent any
-
-  options {
-    // 最多保留7天或者10条历史执行记录
-    buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '10')
-  }
-
-  triggers {
-      // 每隔五分钟运行一次
-      cron '*/5 * * * * '
-  }
-
   stages {
     stage('tttt') {
       parallel {
-        stage('tttt') {
+        stage('s1') {
+          agent {
+            docker {
+              image 'ubuntu:18.04'
+            }
+
+          }
           steps {
             sh 'ls'
             echo 'hello'
+            ws(dir: 's1') {
+              sh '''ls
+pwd'''
+            }
+
           }
         }
 
-        stage('uuuu') {
+        stage('s2') {
           steps {
             sh 'ls'
           }
@@ -30,11 +30,11 @@ pipeline {
       }
     }
 
-    stage('iiii') {
-      steps {
-        sh 'ls'
-      }
-    }
-
+  }
+  options {
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '10'))
+  }
+  triggers {
+    cron('*/5 * * * * ')
   }
 }
